@@ -111,19 +111,19 @@ class QuantityDiscount
   def initialize(quantityDiscount)
     @discount = quantityDiscount
   end
-  
+
   def apply(line_item)
     # Find quantityDiscount Object - Get Quantity/Discount
     quantity, discount = @discount.find do |quantity, _|
       line_item.quantity >= quantity
     end
-    
+
     # Calculated the discounted line price using the line discount.
     discount_price = line_item.line_price - (Money.new(cents:100) * discount * line_item.quantity)
-    
+
     #Caculate Total Discount
     total_discount = Decimal.new(discount * line_item.quantity) + 0.01
-    
+
     # Set Message.
     message = "$#{discount} off per item when buying more than #{quantity - 1}. You saved $#{total_discount - 0.01}!"
 
@@ -151,7 +151,7 @@ CAMPAIGNS = [
     ),
     QuantityDiscount.new(TopSeller),
   ),
-  
+
   # Quantity Breaks for Individual
   BulkItemCampaign.new(
     Individual,
@@ -161,7 +161,7 @@ CAMPAIGNS = [
     ),
     QuantityDiscount.new(Individual),
   ),
-  
+
   # Quantity Breaks for Pocket Guides
   BulkItemCampaign.new(
     PocketGuide,
